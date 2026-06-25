@@ -107,13 +107,30 @@ curl -X POST http://localhost:8090/api/v1/health-records \
 
 ### 5. Database Management
 
-#### Access H2 Console (if using H2)
-`http://localhost:8090/api/h2-console`
+#### Connect to PostgreSQL
+Using psql:
+```bash
+psql -h localhost -p 5434 -U postgres -d myhealth
+```
+
+Using pgAdmin or DBeaver:
+- Host: `localhost`
+- Port: `5434`
+- Database: `myhealth`
+- User: `postgres`
+- Password: `postgres`
+
+#### View Database Schema
+```sql
+\dt  -- List all tables
+\d health_records  -- Describe table structure
+```
 
 #### Flyway Migrations
 Migrations are in `src/main/resources/db/migration/`
 - Automatically run on application startup
 - Check logs for migration status
+- Verify with: `SELECT * FROM flyway_schema_history;`
 
 ### 6. Development Tips
 
@@ -158,6 +175,7 @@ server:
 - Verify PostgreSQL is running: `docker ps | grep postgres`
 - Check port: `docker port myhealth-postgres`
 - Verify credentials in `application.yaml`
+- Test connection: `psql -h localhost -p 5434 -U postgres -d myhealth`
 
 ### Gradle sync issues
 - Run: `./gradlew --stop` to stop daemon
